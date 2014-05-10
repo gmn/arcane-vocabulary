@@ -1,0 +1,387 @@
+<html>
+<head>
+
+<script src="/queryable.js"></script>
+<script src="/vocabulary.js"></script>
+<script src="/pager.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
+
+<style>
+* { padding:0; margin:0; }
+table tr td { 
+    min-width:40px;
+    padding:1px 5px;
+    border:2px solid #bbb;
+}
+table tr td b { font-size: 1.2em; font-weight: bold; }
+#container { padding: 10px; margin: 10px; border:2px solid gray; width:300px }
+#container b {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin: 0 0 8px 0;
+}
+#container span {
+    font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+    font-weight: normal;
+    font-size: 1.0em;
+}
+
+.tooltip_wrap {
+    width:540px; /* 270 */
+    background-color:#EBDADA;
+
+    box-shadow: 3px 4px 6px #090909;
+    border-radius:4px;
+
+    position: absolute;
+    left:50%;
+    margin-left:-290px; /* w + pad + bord */
+    top: 80px;
+
+    padding: 25px 10px;
+    border:10px solid #5c9bb7;
+}
+.tooltip{
+    background-color:#5c9bb7;
+
+    background-image:-webkit-linear-gradient(top, #5c9bb7, #5392ad);
+    background-image:-moz-linear-gradient(top, #5c9bb7, #5392ad);
+    background-image:linear-gradient(top, #5c9bb7, #5392ad);
+
+    box-shadow: 0 1px 1px #ccc;
+    border-radius:3px;
+    width: 290px;
+    padding: 10px;
+
+    position:relative;
+/*    left:70px; */
+    margin-left:70px;
+    top:40%;
+}
+
+.tooltip:after{
+    /* The tip of the tooltip */
+    content:'';
+    position:absolute;
+    border:6px solid #5190ac;
+    border-color:#5190ac transparent transparent;
+    width:0;
+    height:0;
+    bottom:-12px;
+    left:50%;
+    margin-left:-6px;
+}
+
+.tooltip input{
+    border: none;
+    width: 100%;
+    line-height: 34px;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px #bbb inset;
+    text-align: center;
+    font-size: 16px;
+    font-family: inherit;
+    color: #8d9395;
+    font-weight: bold;
+    outline: none;
+}
+.confirm {
+    background-color: #fff;
+
+    position: absolute;
+    left:50%;
+    margin-left:-150px; /* w + pad + bord */
+    top: 80px;
+
+    width: 300px;
+    height: 240px;
+
+    border: 4px solid black;
+    font-weight: bold;
+}
+
+</style>
+
+<script>
+function _alertFunc(msg) {
+    alert( "message: '" + msg + "'" );
+}
+
+
+angular.module("vocabApp", [])
+  .filter( 'searchFor', function() {
+    return function(arr, searchString, count) {
+        var result = [];
+        if (!searchString) {
+            if ( count ) 
+                return result.length;
+            return result;
+        }
+        var regex = new RegExp( '^' + searchString.toLowerCase() );
+
+        // Using the forEach helper method to loop through the array
+        angular.forEach(arr, function(item){
+            if ( item.word.match( regex ) ) {
+                result.push(item);
+            }
+        });
+        
+        if ( count ) 
+            return result.length;
+        return result;
+    } ;
+  } )
+
+  .filter( 'matchCount', function() {
+    return function(arr, searchString) {
+        if (!searchString) {
+            return 0;
+        }
+
+        var how_many = 0;
+
+        var regex = new RegExp( '^' + searchString.toLowerCase() );
+
+        // Using the forEach helper method to loop through the array
+        angular.forEach(arr, function(item){
+            if ( item.word.match( regex ) ) {
+                ++how_many;
+            }
+        });
+        
+        return how_many;
+    } ;
+  } )
+
+  .filter( 'reverse', function() {
+    return function(word) {
+        if (!word || word.length == 0) {
+            return '';
+        }
+        var r = [];
+        for ( var i = word.length-1 ; i >= 0; i-- ) {
+            r.push( word[i] );
+        }
+        return r.join('').toUpperCase();
+    } ;
+  } )
+
+    .filter( 'strlen', function() {
+        return function(word) {
+            if ( !word )
+                return 0;
+            return word.length;
+        };
+    } )
+
+    .filter( 'isExactMatch', function() {
+        return function(ary,word) {
+            if (!word || word.length < 1) {
+                return {bval:false,def:''};
+            }
+            var how_many = 0;
+            word = word.toLowerCase();
+            var regex = new RegExp( '^' + word + '$' );
+            var def = '';
+            angular.forEach(ary, function(item){
+                if ( item.word.match( regex ) ) {
+                    ++how_many;
+                    def = item.def;
+                }
+            });
+            return 1 == how_many ? {bval:true,def:def} : {bval:false,def:''};
+        };
+    } )
+
+  .controller( 'searchBoxController', function($scope, $filter) 
+  {
+    $scope.items = [];
+    $scope.count = -777;
+    $scope.enterMessage = '';
+    $scope.showtooltip = false;
+    $scope.showConfirm = false;
+    $scope.allowOverride = true;
+
+    $scope.init = function() { 
+        $scope.count = 0; 
+        // create db from JSON from vocabulary.js
+        $scope.db = queryable.open( {"db_name":"TestPage","data":JSON.stringify(_stub_vocabulary)} );
+        $scope.items = $scope.db.find(/.*/);
+        $scope.items = $scope.items._data;
+
+        //$scope.items = _stub_vocabulary;
+    }
+
+    $scope.alertFunc = _alertFunc;
+
+    $scope.key = function(e) {
+        $scope.count++;
+        if ( e.which === 13 ) { // RETURN/ENTER
+            //$scope.alertFunc( $scope.searchString );
+
+            e.stopPropagation();
+
+            if ( $scope.showConfirm ) {
+                $scope.insertOrUpdate();
+                $scope.hideTooltip();
+                $scope.hideConfirm();
+            } else if ( ! $scope.showtooltip ) {
+                $scope.showtooltip = true;
+            } else {
+                $scope.showConfirm = true;
+            }
+        }
+        else if ( e.which === 27 ) { // ESCAPE
+            if ( $scope.showConfirm ) {
+                $scope.hideConfirm();
+            } else {
+                $scope.hideTooltip();
+                $scope.hideConfirm();
+            }
+        }
+    };
+
+    $scope.hideTooltip = function() {
+        $scope.showtooltip = false;
+    };
+    $scope.hideConfirm = function() {
+        $scope.showConfirm = false;
+    }
+
+    $scope.insertOrUpdate = function() {
+        var regex = new RegExp( '^'+$scope.searchString+'$' );
+        var res = $scope.db.find( {word:regex} );
+        if ( res.length == 1 ) { // UPDATE
+            $scope.db.update( {word:regex}, {'$set':{def:$scope.definition}} );
+        } else { // INSERT
+            $scope.db.insert( {word:$scope.searchString,def:$scope.definition} );
+        }
+        
+        $scope.items = $scope.db.find(/.*/);
+        $scope.items = $scope.items._data;
+    };
+
+    $scope.dynamicDefinition = function() {
+        var exactDef = $filter('isExactMatch')($scope.items,$scope.searchString);
+        // if definition box has focus, don't force-set it, 
+        // only change it if editing the 'word' parm
+
+        if ( $scope.allowOverride ) 
+            $scope.definition = exactDef.def;
+        return exactDef.bval;
+    };
+
+    $scope.stopOverride = function() {
+        $scope.allowOverride = false;
+    };
+
+    $scope.resumeOverride = function() {
+        $scope.allowOverride = true;
+    };
+
+
+    //
+    $scope.$on( 'toggle', function() {
+        $scope.do_msg = !$scope.do_msg;
+    } );
+
+    $scope.send_event = function() {
+    };
+
+} );
+
+</script>
+
+</head>
+
+<body ng-app="vocabApp" ng-controller="searchBoxController" ng-init="init()" ng-click="hideTooltip()" ng-keydown="key($event)" ng-keyup="send_event()" >
+
+<div id="container">
+    <b>Vocabulary Tutor</b><br>
+    <span>Type to Lookup Word:</span><br>
+    <div class="bar">
+        <!-- binding between the searchString model and the text field -->
+        <input type="text" ng-model="searchString" placeholder="Enter your search terms" />
+    </div>
+
+<br>
+<table>
+    <tr><td>
+        key down count: 
+    </td><td>
+        <b>{{count}}</b>
+    </td></tr>
+    <tr><td>
+        number results: 
+    </td><td>
+        <b>{{items|matchCount:searchString}}</b>
+    </td></tr>
+    <tr><td>
+        search string: 
+    </td><td>
+        "<b>{{searchString}}</b>"
+    </td></tr>
+    <tr><td>
+        search length: 
+    </td><td>
+        "<b>{{searchString|strlen}}</b>"
+    </td></tr>
+    <tr><td>
+        search reversed: 
+    </td><td>
+        "<b>{{searchString|reverse}}</b>"
+    </td></tr>
+</table>
+<br>
+
+</div><!-- container -->
+
+   <!-- This is the tooltip. It is shown only when the showtooltip variable is truthful -->
+<div class="tooltip_wrap" ng-click="$event.stopPropagation()" ng-show="showtooltip">
+    <span ng-show="dynamicDefinition()">Edit Word <b>{{searchString}}</b></span>
+    <span ng-show="!dynamicDefinition()">Add New Word <b>{{searchString}}</b></span>
+
+    <!--
+    <div class="tooltip" ng-click="$event.stopPropagation()" ng-show="showtooltip">
+    -->
+
+<!-- ng-model binds the contents of the text field with the "value" model.
+ Any changes to the text field will automatically update the value, and
+ all other bindings on the page that depend on it.  -->
+<!--
+    <div class="tooltip">
+    </div>
+-->
+
+    <br>
+    Word: 
+        <input type="text" ng-model="searchString" />
+    def: 
+        <textarea rows="6" cols="30" type="text" ng-model="definition" ng-focus="stopOverride()" ng-blur="resumeOverride()" ></textarea>
+
+    <br>
+    <input type="button" value="Delete" /> &nbsp;
+    <input type="button" value="Cancel" /> &nbsp;
+    <input type="button" value="Submit" />
+</div>
+
+<div class="confirm" ng-show="showConfirm">
+    CONFIRM DIALOG <br>
+    <input type="submit" value="Cancel" /> &nbsp;
+    <input type="submit" value="OK" />
+</div>
+
+        <!-- Render a li element for every entry in the items array. Notice
+             the custom search filter "searchFor". It takes the value of the
+             searchString model as an argument.  -->
+    <table class="h" cellpadding="0" cellspacing="0" border="0">
+        <tr ng-repeat="i in items | searchFor:searchString">
+            <td class="left">{{i.word}}</td>
+            <td class="right">{{i.def}}</td>
+        </tr>
+    </table>
+
+
+</body>
+</html>
