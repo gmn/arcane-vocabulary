@@ -1,6 +1,6 @@
 # Arcane Vocabulary Tutor
 
-Test application using Angular.js
+Test application that uses Angular.js
 
 setup environment:
 
@@ -15,3 +15,4 @@ start web-server:
 ~$ ./bin/run-www
 ```
 
+navigate to [localhost:3000](http://localhost:3000) in your web browser and voila
