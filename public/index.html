@@ -6,15 +6,27 @@
 <script src="/pager.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
 
+<meta name="viewport"
+  content="width=device-width,
+  minimum-scale=1.0, maximum-scale=1.0" />
+
+<link href="/css/style.css" rel="stylesheet">
+
 <style>
 * { padding:0; margin:0; }
+
 table tr td { 
     min-width:40px;
     padding:1px 5px;
     border:2px solid #bbb;
 }
 table tr td b { font-size: 1.2em; font-weight: bold; }
-#container { padding: 10px; margin: 10px; border:2px solid gray; width:300px }
+#container { 
+padding: 10px; 
+margin: 10px auto; 
+border:2px solid #125; 
+width:70%;
+}
 #container b {
     font-family: Arial, sans-serif;
     font-weight: bold;
@@ -27,7 +39,7 @@ table tr td b { font-size: 1.2em; font-weight: bold; }
     font-size: 1.0em;
 }
 
-.tooltip_wrap {
+.popover_box {
     width:540px; /* 270 */
     background-color:#EBDADA;
 
@@ -42,50 +54,7 @@ table tr td b { font-size: 1.2em; font-weight: bold; }
     padding: 25px 10px;
     border:10px solid #5c9bb7;
 }
-.tooltip{
-    background-color:#5c9bb7;
 
-    background-image:-webkit-linear-gradient(top, #5c9bb7, #5392ad);
-    background-image:-moz-linear-gradient(top, #5c9bb7, #5392ad);
-    background-image:linear-gradient(top, #5c9bb7, #5392ad);
-
-    box-shadow: 0 1px 1px #ccc;
-    border-radius:3px;
-    width: 290px;
-    padding: 10px;
-
-    position:relative;
-/*    left:70px; */
-    margin-left:70px;
-    top:40%;
-}
-
-.tooltip:after{
-    /* The tip of the tooltip */
-    content:'';
-    position:absolute;
-    border:6px solid #5190ac;
-    border-color:#5190ac transparent transparent;
-    width:0;
-    height:0;
-    bottom:-12px;
-    left:50%;
-    margin-left:-6px;
-}
-
-.tooltip input{
-    border: none;
-    width: 100%;
-    line-height: 34px;
-    border-radius: 3px;
-    box-shadow: 0 2px 6px #bbb inset;
-    text-align: center;
-    font-size: 16px;
-    font-family: inherit;
-    color: #8d9395;
-    font-weight: bold;
-    outline: none;
-}
 .confirm {
     background-color: #fff;
 
@@ -100,14 +69,13 @@ table tr td b { font-size: 1.2em; font-weight: bold; }
     border: 4px solid black;
     font-weight: bold;
 }
-
 </style>
+
 
 <script>
 function _alertFunc(msg) {
     alert( "message: '" + msg + "'" );
 }
-
 
 angular.module("vocabApp", [])
   .filter( 'searchFor', function() {
@@ -154,6 +122,14 @@ angular.module("vocabApp", [])
     } ;
   } )
 
+    .filter( 'arrayLength', function() {
+        return function(ary) {
+            if ( arguments.length === 0 )
+                return 0;
+            return ary.length;
+        };
+    } )
+
   .filter( 'reverse', function() {
     return function(word) {
         if (!word || word.length == 0) {
@@ -197,14 +173,14 @@ angular.module("vocabApp", [])
   .controller( 'searchBoxController', function($scope, $filter) 
   {
     $scope.items = [];
-    $scope.count = -777;
+    $scope.keycount = -777;
     $scope.enterMessage = '';
     $scope.showtooltip = false;
     $scope.showConfirm = false;
     $scope.allowOverride = true;
 
     $scope.init = function() { 
-        $scope.count = 0; 
+        $scope.keycount = 0; 
         // create db from JSON from vocabulary.js
         $scope.db = queryable.open( {"db_name":"TestPage","data":JSON.stringify(_stub_vocabulary)} );
         $scope.items = $scope.db.find(/.*/);
@@ -216,7 +192,7 @@ angular.module("vocabApp", [])
     $scope.alertFunc = _alertFunc;
 
     $scope.key = function(e) {
-        $scope.count++;
+        $scope.keycount++;
         if ( e.which === 13 ) { // RETURN/ENTER
             //$scope.alertFunc( $scope.searchString );
 
@@ -290,69 +266,71 @@ angular.module("vocabApp", [])
     };
 
 } );
-
 </script>
 
 </head>
 
 <body ng-app="vocabApp" ng-controller="searchBoxController" ng-init="init()" ng-click="hideTooltip()" ng-keydown="key($event)" ng-keyup="send_event()" >
 
-<div id="container">
-    <b>Vocabulary Tutor</b><br>
+<div id="main-panel">
+<center>
+
+  <div id="container">
+    <b>Arcane Vocabulary Tutor</b><br>
     <span>Type to Lookup Word:</span><br>
     <div class="bar">
         <!-- binding between the searchString model and the text field -->
         <input type="text" ng-model="searchString" placeholder="Enter your search terms" />
     </div>
 
-<br>
-<table>
-    <tr><td>
-        key down count: 
-    </td><td>
-        <b>{{count}}</b>
-    </td></tr>
-    <tr><td>
-        number results: 
-    </td><td>
-        <b>{{items|matchCount:searchString}}</b>
-    </td></tr>
-    <tr><td>
-        search string: 
-    </td><td>
-        "<b>{{searchString}}</b>"
-    </td></tr>
-    <tr><td>
-        search length: 
-    </td><td>
-        "<b>{{searchString|strlen}}</b>"
-    </td></tr>
-    <tr><td>
-        search reversed: 
-    </td><td>
-        "<b>{{searchString|reverse}}</b>"
-    </td></tr>
-</table>
-<br>
+    <br>
+    <table>
+      <tr><td>
+          key down count: 
+      </td><td>
+          <b>{{keycount}}</b>
+      </td></tr>
+      <tr><td>
+          total number words: 
+      </td><td>
+          <b>{{items|arrayLength}}</b>
+      </td></tr>
+      <tr><td>
+          number of matching results: 
+      </td><td>
+          <b>{{items|matchCount:searchString}}</b>
+      </td></tr>
+      <tr><td>
+          search string: 
+      </td><td>
+          "<b>{{searchString}}</b>"
+      </td></tr>
+    <!--
+      <tr><td>
+          search length: 
+      </td><td>
+          "<b>{{searchString|strlen}}</b>"
+      </td></tr>
+      <tr><td>
+          search reversed:
+      </td><td>
+          "<b>{{searchString|reverse}}</b>"
+      </td></tr>
+    -->
+    </table>
+    <br>
 
-</div><!-- container -->
+  </div><!-- container -->
 
-   <!-- This is the tooltip. It is shown only when the showtooltip variable is truthful -->
-<div class="tooltip_wrap" ng-click="$event.stopPropagation()" ng-show="showtooltip">
-    <span ng-show="dynamicDefinition()">Edit Word <b>{{searchString}}</b></span>
+  <div class="popover_box" ng-click="$event.stopPropagation()" ng-show="showtooltip">
+
+    <span ng-show="dynamicDefinition()"><h2><u>Exact Match</u></h2> &mdash; Edit Word <b>{{searchString}}</b></span>
     <span ng-show="!dynamicDefinition()">Add New Word <b>{{searchString}}</b></span>
 
-    <!--
-    <div class="tooltip" ng-click="$event.stopPropagation()" ng-show="showtooltip">
-    -->
 
 <!-- ng-model binds the contents of the text field with the "value" model.
  Any changes to the text field will automatically update the value, and
  all other bindings on the page that depend on it.  -->
-<!--
-    <div class="tooltip">
-    </div>
--->
 
     <br>
     Word: 
@@ -364,24 +342,26 @@ angular.module("vocabApp", [])
     <input type="button" value="Delete" /> &nbsp;
     <input type="button" value="Cancel" /> &nbsp;
     <input type="button" value="Submit" />
-</div>
+  </div>
 
-<div class="confirm" ng-show="showConfirm">
+  <div class="confirm" ng-show="showConfirm">
     CONFIRM DIALOG <br>
     <input type="submit" value="Cancel" /> &nbsp;
     <input type="submit" value="OK" />
-</div>
+  </div>
 
-        <!-- Render a li element for every entry in the items array. Notice
-             the custom search filter "searchFor". It takes the value of the
-             searchString model as an argument.  -->
-    <table class="h" cellpadding="0" cellspacing="0" border="0">
-        <tr ng-repeat="i in items | searchFor:searchString">
-            <td class="left">{{i.word}}</td>
-            <td class="right">{{i.def}}</td>
-        </tr>
-    </table>
+  <!-- Render a li element for every entry in the items array. Notice
+       the custom search filter "searchFor". It takes the value of the
+       searchString model as an argument.  -->
+  <table class="h" cellpadding="0" cellspacing="0" border="0">
+    <tr ng-repeat="i in items | searchFor:searchString">
+      <td class="left">{{i.word}}</td>
+      <td class="right">{{i.def}}</td>
+    </tr>
+  </table>
 
+</center>
+</div><!-- main-panel -->
 
 </body>
 </html>

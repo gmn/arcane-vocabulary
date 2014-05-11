@@ -1,0 +1,53 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+/* Adaptive / Responsive */
+@media all and (min-width:320px) {
+    #main-panel {
+        width:300px;
+        border: 1px solid #900;
+    }
+}
+@media all and (min-width:480px) {
+    #main-panel {
+        width:400px;
+        border: 1px solid #990;
+    }
+}
+@media all and (min-width:600px) {
+    #main-panel {
+        width:540px;
+        border: 1px solid #909;
+    }
+}
+@media all and (min-width:768px) {
+    #main-panel {
+        width:600px;
+        border: 1px solid #099;
+    }
+}
+@media all and (min-width:900px) {
+    #main-panel {
+        width:800px;
+        border: 1px solid #009;
+    }
+}
+@media all and (min-width:1200px) {
+    #main-panel {
+        width:1000px;
+        border: 1px solid #090;
+    }
+}
+
+.main-panel {
+    margin:5px auto;
+    padding:5px;
+    margin:5px;
+}
+

@@ -34,5 +34,12 @@ router.get('/pager.js', function(req, res) {
         res.end();
     });
 });
+router.get("/css/style.css", function(req, res) {
+    fs.readFile('./public/css/style.css', function (err, html) {
+        res.writeHeader(200, {"Content-Type": "text/css"});
+        res.write(html);
+        res.end();
+    });
+}); 
 
 module.exports = router;
