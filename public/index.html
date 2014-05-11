@@ -72,12 +72,12 @@
 
 
     <div class="row console" style="margin-bottom:18px">
-      <div class="col-md-3">Total Words:</div>
-      <div class="col-md-3"> 
+      <div class="col-xs-4">Total Words:</div>
+      <div class="col-xs-2"> 
         <strong>{{items|arrayLength}}</strong>
       </div>
-      <div class="col-md-3">Matching Results:</div> 
-      <div class="col-md-3"> 
+      <div class="col-xs-4">Matching Results:</div> 
+      <div class="col-xs-2"> 
         <strong>{{items|matchCount:searchString}}</strong>
       </div>
     </div>
@@ -100,6 +100,7 @@
       <div class="col-md-1"></div>
       <div class="col-md-10">
 
+<!--
         <div class="panel panel-warning" ng-repeat="i in items | searchFor:searchString">
           <div class="panel-heading">
             <h3 class="panel-title">{{i.word}}</h3>
@@ -109,14 +110,15 @@
           </div>
         </div>
 
-<!--
-          <div class="list-group">
-            <a href="#" class="list-group-item active">
-              <h4 class="list-group-item-heading">List group item heading</h4>
-              <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-            </a>
-          </div>
+            <a href="#" class="list-group-item active" ng-repeat="i in items | searchFor:searchString">
 -->
+
+        <div class="list-group">
+          <a href="#" class="list-group-item" ng-repeat="i in items | searchFor:searchString">
+            <h4 class="list-group-item-heading">{{i.word}}</h4>
+            <p class="list-group-item-text">{{i.def}}</p>
+          </a>
+        </div>
 
       </div>
       <div class="col-md-1"></div>

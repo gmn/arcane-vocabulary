@@ -144,7 +144,6 @@ body {
 .jumbotron {
   text-align: center;
   border: 1px solid #bbb;
-  box-shadow: 0px 0px 6px #bbb inset;
 }
 .jumbotron .btn {
   padding: 14px 24px;
@@ -184,5 +183,17 @@ body {
   background-color: #eee;
   border: 1px solid #bbb;
   margin:0;
+/*
   box-shadow: 0 -2px 12px #bbb inset;
+*/
+  box-shadow: 0px 0px 6px #bbb inset;
+  font-size:18px;
+}
+.jumbotron {
+  box-shadow: 0px 0px 6px #bbb inset;
+}
+
+.panel {
+  border: 1px solid #ddd;
+  box-shadow: 2px 2px 6px #CCE;
 }
