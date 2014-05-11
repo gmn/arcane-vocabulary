@@ -36,76 +36,41 @@
 
 <body ng-app="vocabApp" ng-controller="searchBoxController" ng-init="init()" ng-click="hideTooltip()" ng-keydown="key($event)" ng-keyup="send_event()" >
 
- <div class="container custom" role="main">
+  <div class="container custom" role="main">
 
+    <div class="jumbotron">
+      <h1 style="margin-top:0">Arcane Vocabulary Tutor</h1>
+      <p class="font-size:16px !important">This is a simple Vocabulary Tutor that stores word definitions so you can add new words as you discover them. Start typing into the input box to see if the word you are looking for is already stored.</p>
 
-      <div class="jumbotron">
-        <h1 style="margin-top:0">Arcane Vocabulary Tutor</h1>
-        <p class="font-size:16px !important">This is a simple Vocabulary Tutor that stores word definitions so you can add new words as you discover them. Start typing into the input box to see if the word you are looking for is already stored.</p>
-      </div>
+      <h3>Total Words: {{items|arrayLength}}</h3>
 
-
-
-    <div class="panel">
+      <div class="panel">
         <!-- binding between the searchString model and the text field -->
-        <input type="text" ng-model="searchString" placeholder="Enter your search terms" />
+        <input class="big_input" type="text" ng-model="searchString" placeholder="Enter your search terms" />
+      </div><!-- panel -->
 
-    <table>
-      <tr><td>
-          key down count: 
-      </td><td>
-          <b>{{keycount}}</b>
-      </td></tr>
-      <tr><td>
-          total number words: 
-      </td><td>
-          <b>{{items|arrayLength}}</b>
-      </td></tr>
-      <tr><td>
-          number of matching results: 
-      </td><td>
-          <b>{{items|matchCount:searchString}}</b>
-      </td></tr>
-      <tr><td>
-          search string: 
-      </td><td>
-          "<b>{{searchString}}</b>"
-      </td></tr>
-    <!--
-      <tr><td>
-          search length: 
-      </td><td>
-          "<b>{{searchString|strlen}}</b>"
-      </td></tr>
-      <tr><td>
-          search reversed:
-      </td><td>
-          "<b>{{searchString|reverse}}</b>"
-      </td></tr>
-    -->
-    </table>
-  </div><!-- panel -->
+      <h3>Matching Results: {{items|matchCount:searchString}}</h3>
+      <h3>Search String: "{{searchString}}"</h3>
+
 
   <div class="popover_box" ng-click="$event.stopPropagation()" ng-show="showtooltip">
-
     <span ng-show="dynamicDefinition()"><h2><u>Exact Match</u></h2> &mdash; Edit Word <b>{{searchString}}</b></span>
     <span ng-show="!dynamicDefinition()">Add New Word <b>{{searchString}}</b></span>
 
 <!-- ng-model binds the contents of the text field with the "value" model.
  Any changes to the text field will automatically update the value, and
  all other bindings on the page that depend on it.  -->
-
     <br>
     Word: 
         <input type="text" ng-model="searchString" />
     def: 
         <textarea rows="6" cols="30" type="text" ng-model="definition" ng-focus="stopOverride()" ng-blur="resumeOverride()" ></textarea>
-
     <br>
     <input type="button" value="Delete" /> &nbsp;
     <input type="button" value="Cancel" /> &nbsp;
     <input type="button" value="Submit" />
   </div>
+
 
   <div class="confirm" ng-show="showConfirm">
     CONFIRM DIALOG <br>
@@ -113,11 +78,9 @@
     <input type="submit" value="OK" />
   </div>
 
-  <!-- Render an element for every entry in the items array. Notice
-       the custom search filter "searchFor". It takes the value of the
-       searchString model as an argument.  -->
+
   <div class="panel">
-  <table class="h" cellpadding="0" cellspacing="0" border="0">
+  <table class="bordered" cellpadding="0" cellspacing="0" border="0">
     <tr ng-repeat="i in items | searchFor:searchString">
       <td class="left">{{i.word}}</td>
       <td class="right">{{i.def}}</td>
@@ -125,6 +88,10 @@
   </table>
   </div>
 
+
+  </div><!-- jumbotron -->
+
  </div><!-- container -->
+
 </body>
 </html>
