@@ -38,60 +38,114 @@
 
   <div class="container custom" role="main">
 
-    <div class="jumbotron">
+      <div class="header">
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        <h3 class="text-muted">Arcane Vocabulary Tutor</h3>
+      </div>
+
+    <div class="jumbotron" style="margin-bottom:18px;padding:30px 40px">
+
+<!--
       <h1 style="margin-top:0">Arcane Vocabulary Tutor</h1>
+
       <p class="font-size:16px !important">This is a simple Vocabulary Tutor that stores word definitions so you can add new words as you discover them. Start typing into the input box to see if the word you are looking for is already stored.</p>
+-->
 
-      <h3>Total Words: {{items|arrayLength}}</h3>
-
+<!--
       <div class="panel">
-        <!-- binding between the searchString model and the text field -->
-        <input class="big_input" type="text" ng-model="searchString" placeholder="Enter your search terms" />
-      </div><!-- panel -->
+-->
 
-      <h3>Matching Results: {{items|matchCount:searchString}}</h3>
-      <h3>Search String: "{{searchString}}"</h3>
+        <input class="big_input" type="text" ng-model="searchString" placeholder="Type to lookup words" />
 
+<!--
+      </div>
+-->
 
-  <div class="popover_box" ng-click="$event.stopPropagation()" ng-show="showtooltip">
-    <span ng-show="dynamicDefinition()"><h2><u>Exact Match</u></h2> &mdash; Edit Word <b>{{searchString}}</b></span>
-    <span ng-show="!dynamicDefinition()">Add New Word <b>{{searchString}}</b></span>
-
-<!-- ng-model binds the contents of the text field with the "value" model.
- Any changes to the text field will automatically update the value, and
- all other bindings on the page that depend on it.  -->
-    <br>
-    Word: 
-        <input type="text" ng-model="searchString" />
-    def: 
-        <textarea rows="6" cols="30" type="text" ng-model="definition" ng-focus="stopOverride()" ng-blur="resumeOverride()" ></textarea>
-    <br>
-    <input type="button" value="Delete" /> &nbsp;
-    <input type="button" value="Cancel" /> &nbsp;
-    <input type="button" value="Submit" />
-  </div>
+<!--
+      <h3>Search String: <code>{{searchString}}</code></h3>
+-->
+    </div><!-- jumbotron -->
 
 
-  <div class="confirm" ng-show="showConfirm">
-    CONFIRM DIALOG <br>
-    <input type="submit" value="Cancel" /> &nbsp;
-    <input type="submit" value="OK" />
-  </div>
+    <div class="row console" style="margin-bottom:18px">
+      <div class="col-md-3">Total Words:</div>
+      <div class="col-md-3"> 
+        <strong>{{items|arrayLength}}</strong>
+      </div>
+      <div class="col-md-3">Matching Results:</div> 
+      <div class="col-md-3"> 
+        <strong>{{items|matchCount:searchString}}</strong>
+      </div>
+    </div>
 
 
-  <div class="panel">
-  <table class="bordered" cellpadding="0" cellspacing="0" border="0">
-    <tr ng-repeat="i in items | searchFor:searchString">
-      <td class="left">{{i.word}}</td>
-      <td class="right">{{i.def}}</td>
-    </tr>
-  </table>
-  </div>
+    <!-- results -->
+
+<!--
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+      <table class="bordered" cellpadding="0" cellspacing="0" border="0">
+        <tr ng-repeat="i in items | searchFor:searchString">
+          <td class="left">{{i.word}}</td>
+          <td class="right">{{i.def}}</td>
+        </tr>
+      </table>
+-->
+
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-10">
+
+        <div class="panel panel-warning" ng-repeat="i in items | searchFor:searchString">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{i.word}}</h3>
+          </div>
+          <div class="panel-body">
+            {{i.def}}
+          </div>
+        </div>
+
+<!--
+          <div class="list-group">
+            <a href="#" class="list-group-item active">
+              <h4 class="list-group-item-heading">List group item heading</h4>
+              <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+            </a>
+          </div>
+-->
+
+      </div>
+      <div class="col-md-1"></div>
+    </div>
+      
 
 
-  </div><!-- jumbotron -->
+    <!-- popup boxes -->
+    <div class="popover_box" ng-click="$event.stopPropagation()" ng-show="showtooltip">
+      <span ng-show="dynamicDefinition()"><h2><u>Exact Match</u></h2> &mdash; Edit Word <b>{{searchString}}</b></span>
+      <span ng-show="!dynamicDefinition()">Add New Word <b>{{searchString}}</b></span>
+      Word: 
+          <input type="text" ng-model="searchString" />
+      def: 
+          <textarea rows="6" cols="30" type="text" ng-model="definition" ng-focus="stopOverride()" ng-blur="resumeOverride()" ></textarea>
+      <br>
+      <input type="button" value="Delete" /> &nbsp;
+      <input type="button" value="Cancel" /> &nbsp;
+      <input type="button" value="Submit" />
+    </div>
 
- </div><!-- container -->
+
+    <div class="confirm" ng-show="showConfirm">
+      CONFIRM DIALOG <br>
+      <input type="submit" value="Cancel" /> &nbsp;
+      <input type="submit" value="OK" />
+    </div>
+
+  </div><!-- container -->
 
 </body>
 </html>
