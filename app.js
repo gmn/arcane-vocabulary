@@ -22,6 +22,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+
+// serve all static files in /public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 //

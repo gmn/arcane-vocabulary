@@ -1,0 +1,13 @@
+
+.custom {
+}
+
+
+table tr td {
+  min-width:40px;
+  padding:1px 5px;
+  border:2px solid #bbb;
+}
+table tr td b { font-size: 1.2em; font-weight: bold; }
+
+
