@@ -34,7 +34,7 @@
 
 
 
-<body ng-app="vocabApp" ng-controller="searchBoxController" ng-init="init()" ng-click="hideTooltip()" ng-keydown="key($event)" ng-keyup="send_event()" >
+<body ng-app="vocabApp" ng-controller="searchBoxController" ng-init="init()" ng-click="hidePopover()" ng-keydown="key($event)" ng-keyup="send_event()" >
 
   <div class="container custom" role="main">
 
@@ -59,7 +59,7 @@
       <div class="panel">
 -->
 
-        <input class="big_input" type="text" ng-model="searchString" placeholder="Type to lookup words" />
+        <input class="big_input" type="text" ng-model="searchString" ng-style="inputStyle()" placeholder="Type to lookup words" />
 
 <!--
       </div>
@@ -126,8 +126,8 @@
       
 
 
-    <!-- popup boxes -->
-    <div class="popover_box" ng-click="$event.stopPropagation()" ng-show="showtooltip">
+    <!-- popup boxes 
+    <div class="popover_box" ng-click="$event.stopPropagation()" ng-show="showPopover">
       <span ng-show="dynamicDefinition()"><h2><u>Exact Match</u></h2> &mdash; Edit Word <b>{{searchString}}</b></span>
       <span ng-show="!dynamicDefinition()">Add New Word <b>{{searchString}}</b></span>
       Word: 
@@ -146,8 +146,37 @@
       <input type="submit" value="Cancel" /> &nbsp;
       <input type="submit" value="OK" />
     </div>
+-->
 
   </div><!-- container -->
+
+<!-- Button trigger modal 
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Launch demo modal
+</button>
+-->
+
+  <!-- jQuery/Bootstrap Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
 
 </body>
 </html>

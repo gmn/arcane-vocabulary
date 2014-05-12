@@ -101,9 +101,10 @@ angular.module("vocabApp", [])
     $scope.items = [];
     $scope.keycount = -777;
     $scope.enterMessage = '';
-    $scope.showtooltip = false;
+    $scope.showPopover = false;
     $scope.showConfirm = false;
     $scope.allowOverride = true;
+    //$scope.inVal = false;
 
     $scope.init = function() { 
         $scope.keycount = 0; 
@@ -119,33 +120,50 @@ angular.module("vocabApp", [])
 
     $scope.key = function(e) {
         $scope.keycount++;
-        if ( e.which === 13 ) { // RETURN/ENTER
+        if ( e.which === 13 ) { // RETURN / ENTER
             //$scope.alertFunc( $scope.searchString );
 
             e.stopPropagation();
 
+            $("#myModal").modal('show');
+/*
             if ( $scope.showConfirm ) {
                 $scope.insertOrUpdate();
-                $scope.hideTooltip();
+                $scope.hidePopover();
                 $scope.hideConfirm();
-            } else if ( ! $scope.showtooltip ) {
-                $scope.showtooltip = true;
+            } else if ( ! $scope.showPopover ) {
+                $scope.showPopover = true;
             } else {
                 $scope.showConfirm = true;
             }
+*/
         }
         else if ( e.which === 27 ) { // ESCAPE
+
+            if ( ! $("#myModal").modal().show ) {
+                $scope.searchString = '';
+            }
+
+/*
+            // close just the confirmation box and leave the popover
             if ( $scope.showConfirm ) {
                 $scope.hideConfirm();
-            } else {
-                $scope.hideTooltip();
-                $scope.hideConfirm();
+
+            // hide the popover
+            } else if ( $scope.showPopover ) {
+                $scope.hidePopover();
+
+            // no boxes are showing:- ESC clears string
+            } else if ( $scope.searchString && $scope.searchString.length > 0 ) {
+                $scope.searchString = '';
             }
+*/
+
         }
     };
 
-    $scope.hideTooltip = function() {
-        $scope.showtooltip = false;
+    $scope.hidePopover = function() {
+        $scope.showPopover = false;
     };
     $scope.hideConfirm = function() {
         $scope.showConfirm = false;
@@ -189,6 +207,13 @@ angular.module("vocabApp", [])
     } );
 
     $scope.send_event = function() {
+    };
+
+    $scope.inputStyle = function() {
+      if ( $scope.searchString && $scope.searchString.length > 0 ) 
+        return {"color":"#919"};
+      else
+        return {};
     };
 
   } ); // .controller searchBoxController
