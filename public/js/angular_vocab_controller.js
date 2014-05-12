@@ -3,7 +3,7 @@ function _alertFunc(msg) {
     alert( "message: '" + msg + "'" );
 }
 
-var module_handle = angular.module("vocabApp", [])
+var app = angular.module("vocabApp", [])
   .filter( 'searchFor', function() {
     return function(arr, searchString, count) {
         var result = [];
@@ -78,21 +78,36 @@ var module_handle = angular.module("vocabApp", [])
   } )
 
   .filter( 'isExactMatch', function() {
-        return function(ary,word) {
+        return function(ary,word) 
+        {
+            var ret = { exact:false,def:'',count:0 };
+
             if (!word || word.length < 1) {
-                return {bval:false,def:''};
+                return ret;
             }
-            var how_many = 0;
+
             word = word.toLowerCase();
-            var regex = new RegExp( '^' + word + '$' );
-            var def = '';
-            angular.forEach(ary, function(item){
-                if ( item.word.match( regex ) ) {
-                    ++how_many;
-                    def = item.def;
+            var starting_reg = new RegExp( '^' + word );
+
+            for ( var i = 0 ; i < ary.length; i++ ) {
+                var item = ary[i];
+
+                // if exact is true, we prevent unsetting it by a later word
+                if ( !ret.exact && item.word !== word ) {
+                    ret.def = '';
+                    ret.exact = false;
+                } else if ( item.word === word ) {
+                    ret.def = item.def;
+                    ret.exact = true;
                 }
-            });
-            return 1 == how_many ? {bval:true,def:def} : {bval:false,def:''};
+
+                // count the partial regex matches
+                if ( item.word.match( starting_reg ) ) {
+                    ret.count++;
+                }
+            }
+
+            return ret;
         };
   } )
 
@@ -103,18 +118,16 @@ var module_handle = angular.module("vocabApp", [])
     $scope.enterMessage = '';
     $scope.showPopover = false;
     $scope.showConfirm = false;
-    $scope.allowOverride = true;
-        $scope.allowOverride = false;
-    $scope.word = {'definition':'hey look at me'};
+    $scope.allowOverwriting = true;
+    $scope.word = {'definition':''};
+    $scope.wordEvaluation = '';
+    $scope.modalOpen = false;
 
     $scope.init = function() { 
         $scope.keycount = 0; 
-        // create db from JSON from vocabulary.js
-        $scope.db = queryable.open( {"db_name":"TestPage","data":JSON.stringify(_stub_vocabulary)} );
-        $scope.items = $scope.db.find(/.*/);
-        $scope.items = $scope.items._data;
-
-        //$scope.items = _stub_vocabulary;
+        // create database of words from vocabulary.js
+        $scope.db = queryable.open( {"db_name":"TestPage","data":_stub_vocabulary} );
+        $scope.items = $scope.db.find(/.*/)._data;
     }
 
     $scope.alertFunc = _alertFunc;
@@ -122,11 +135,20 @@ var module_handle = angular.module("vocabApp", [])
     $scope.key = function(e) {
         $scope.keycount++;
         if ( e.which === 13 ) { // RETURN / ENTER
-            //$scope.alertFunc( $scope.searchString );
 
             e.stopPropagation();
 
-//            $("#myModal").modal('show');
+            $("#myModal").modal('show');
+
+            //$("#modalInput").focus(); 
+
+            // doesn't work right away, wait a second
+            //setTimeout( function(){ $("#modalInput").focus(); }, 500 );
+            // ^ done in directive instead
+
+            $scope.modalOpen = true;
+
+/*
             if ( $scope.showConfirm ) {
                 $scope.insertOrUpdate();
                 $scope.hidePopover();
@@ -136,17 +158,18 @@ var module_handle = angular.module("vocabApp", [])
             } else {
                 $scope.showConfirm = true;
             }
+*/
         }
         else if ( e.which === 27 ) { // ESCAPE
 
-/*
             if ( $("#myModal").css("display") == "none" ) {
                 $scope.searchString = '';
             } else {
                 $("#myModal").modal('hide');
+                $scope.modalOpen = false;
             }
-*/
 
+/*
             // close just the confirmation box and leave the popover
             if ( $scope.showConfirm ) {
                 $scope.hideConfirm();
@@ -159,6 +182,7 @@ var module_handle = angular.module("vocabApp", [])
             } else if ( $scope.searchString && $scope.searchString.length > 0 ) {
                 $scope.searchString = '';
             }
+*/
 
         }
     };
@@ -173,47 +197,61 @@ var module_handle = angular.module("vocabApp", [])
     $scope.insertOrUpdate = function() {
         var regex = new RegExp( '^'+$scope.searchString+'$' );
         var res = $scope.db.find( {word:regex} );
+        var word = $scope.searchString.trim().toLowerCase();
+        var def = $scope.word.definition.trim();
         if ( res.length == 1 ) { // UPDATE
-            $scope.db.update( {word:regex}, {'$set':{def:$scope.word.definition}} );
+            $scope.db.update( {word:regex}, {'$set':{def:def}} );
         } else { // INSERT
-            $scope.db.insert( {word:$scope.searchString,def:$scope.word.definition} );
+            $scope.db.insert( {word:word,def:def} );
         }
         
         $scope.items = $scope.db.find(/.*/);
         $scope.items = $scope.items._data;
     };
 
-    $scope.ModalSave = function(str) {
-      if ( arguments.length === 1 && str.length > 0 && $scope.word.definition.length==0 )
-        $scope.word.definition = str;
+    $scope.ModalSave = function() {
       $scope.insertOrUpdate();
       console.log( "word.definition: " + $scope.word.definition );
-      //$("#myModal").modal('hide');
+      $("#myModal").modal('hide');
       $scope.hidePopover();
+      $scope.allowOverwriting = true;
+      $scope.modalOpen = false;
     };
     $scope.ModalCancel = function() {
-      //$("#myModal").modal('hide');
+      $("#myModal").modal('hide');
       console.log( "word.definition: " + $scope.word.definition );
       $scope.hidePopover();
+      $scope.allowOverwriting = true;
+      $scope.modalOpen = false;
     };
 
+    /* does 3 things:
+        - returns boolean true if word matches exactly 1 stored word
+        - sets the definition in the textarea
+        - sets wordEvaluation
+    */
     $scope.dynamicDefinition = function() {
-        var exactDef = $filter('isExactMatch')($scope.items,$scope.searchString);
+        var edef = $filter('isExactMatch')($scope.items,$scope.searchString);
+
         // if definition box has focus, don't force-set it, 
         // only change it if editing the 'word' parm
+        if ( $scope.allowOverwriting ) {
+            //console.log( "overwriting" );
+            $scope.word.definition = edef.def;
+        } else {
+            //console.log( "blocking overwrite" );
+        }
 
-        if ( $scope.allowOverride ) 
-            $scope.word.definition = exactDef.def;
-        return exactDef.bval;
-    };
-
-    $scope.stopOverride = function() {
-        $scope.allowOverride = false;
-    };
-
-    $scope.resumeOverride = function() {
-        $scope.allowOverride = true;
-        $scope.allowOverride = false;
+        if ( edef.exact ) {
+          $scope.wordEvaluation = 'Exact Match';
+          return {color:'green'};
+        } else if ( edef.count > 1 ) {
+          $scope.wordEvaluation = 'Partial Match';
+          return {color:'#F72'};
+        } else {
+          $scope.wordEvaluation = 'New Word';
+          return {color:'red'};
+        }
     };
 
 
@@ -232,6 +270,11 @@ var module_handle = angular.module("vocabApp", [])
         return {};
     };
 
+    $scope.matchingColor = function() {
+      var num = $filter('matchCount')( $scope.items, $scope.searchString );
+      return {color:{0:'red',1:'green',t:function(n){return(this[n])?this[n]:'#F72'}}.t(num)};
+    }
+
 
   } ); // .controller searchBoxController
 
@@ -244,3 +287,51 @@ $("#modal_submit").click(function() {
     });
   });
 */
+
+//http://stackoverflow.com/questions/14833326/how-to-set-focus-in-angularjs
+/*
+app.directive('focusMe', function($timeout, $parse) {
+  return {
+    link: function(scope, element, attrs) {
+      var model = $parse(attrs.focusMe);
+      scope.$watch(model, function(value) {
+console.log('value='+value);
+        if(value === true) { 
+          $timeout(function() {
+console.log("focus()");
+            element[0].focus(); 
+          });
+        }
+      });
+      element.bind('blur', function() {
+        scope.$apply(model.assign(scope, false));
+console.log('blurring...');
+      });
+    }
+  };
+});
+*/
+
+app.directive('focusMe', function($timeout) {
+  return {
+    link: function(scope, element, attrs) {
+      scope.$watch(attrs.focusMe, function(value) {
+
+console.log( 'focusMe change! Value='+value );
+
+        if (value === true) { 
+
+          $timeout(function() {
+
+            // prevent stealing focus from textarea
+            if ( ! $("#modalDef").is(':focus') ) {
+              element[0].focus();
+//            scope[attrs.focusMe] = false;
+            }
+
+          }, 300 );
+        }
+      });
+    }
+  };
+});

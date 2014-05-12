@@ -18,6 +18,9 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js"></script>
     <script src="/js/angular_vocab_controller.js"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
     <meta name="viewport"
       content="width=device-width,
       minimum-scale=1.0, maximum-scale=1.0" />
@@ -34,7 +37,7 @@
 
 
 
-<body ng-app="vocabApp" ng-controller="searchBoxController" ng-init="init()" ng-click="hidePopover()" ng-keydown="key($event)" ng-keyup="send_event()" >
+<body ng-app="vocabApp" ng-controller="searchBoxController" ng-init="init()" ng-keydown="key($event)">
 
   <div class="container custom" role="main">
 
@@ -55,61 +58,31 @@
       <p class="font-size:16px !important">This is a simple Vocabulary Tutor that stores word definitions so you can add new words as you discover them. Start typing into the input box to see if the word you are looking for is already stored.</p>
 -->
 
-<!--
-      <div class="panel">
--->
+        <input class="big_input" type="text" ng-model="searchString" ng-style="inputStyle()" placeholder="Type to lookup words" focus-me="!modalOpen" />
 
-        <input class="big_input" type="text" ng-model="searchString" ng-style="inputStyle()" placeholder="Type to lookup words" />
-
-<!--
-      </div>
--->
-
-<!--
-      <h3>Search String: <code>{{searchString}}</code></h3>
--->
     </div><!-- jumbotron -->
 
 
     <div class="row console" style="margin-bottom:18px">
       <div class="col-xs-4">Total Words:</div>
       <div class="col-xs-2"> 
-        <strong>{{items|arrayLength}}</strong>
+        <strong style="color:#000">{{items|arrayLength}}</strong>
       </div>
       <div class="col-xs-4">Matching Results:</div> 
       <div class="col-xs-2"> 
-        <strong>{{items|matchCount:searchString}}</strong>
+        <strong ng-style="matchingColor()">{{items|matchCount:searchString}}</strong>
       </div>
     </div>
 
 
     <!-- results -->
 
-<!--
-    <div class="col-lg-2"></div>
-    <div class="col-lg-8">
-      <table class="bordered" cellpadding="0" cellspacing="0" border="0">
-        <tr ng-repeat="i in items | searchFor:searchString">
-          <td class="left">{{i.word}}</td>
-          <td class="right">{{i.def}}</td>
-        </tr>
-      </table>
--->
 
     <div class="row">
       <div class="col-md-1"></div>
       <div class="col-md-10">
 
 <!--
-        <div class="panel panel-warning" ng-repeat="i in items | searchFor:searchString">
-          <div class="panel-heading">
-            <h3 class="panel-title">{{i.word}}</h3>
-          </div>
-          <div class="panel-body">
-            {{i.def}}
-          </div>
-        </div>
-
             <a href="#" class="list-group-item active" ng-repeat="i in items | searchFor:searchString">
 -->
 
@@ -125,24 +98,23 @@
     </div>
       
 
-  <div ng-click="$event.stopPropagation()" ng-show="showPopover">
+  <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" ng-click="ModalCancel()" >&times;</button>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">
-            <input type="text" ng-model="searchString" />
-            <span ng-show="dynamicDefinition()"> &ndash; Exact Match </span>
-            <span ng-show="!dynamicDefinition()"> &ndash; new word</span>
+            <input id="modalInput" tabindex="0" type="text" ng-model="searchString" focus-me="modalOpen" />
+            <span ng-style="dynamicDefinition()"> &ndash; {{wordEvaluation}}</span>
           </h4>
         </div>
         <div class="modal-body">
           Definition:<br>
-          <textarea rows="6" cols="40" type="text" ng-model="word.definition" ng-focus="stopOverride()" ng-blur="resumeOverride()"></textarea>
+          <textarea id="modalDef" rows="6" type="text" ng-model="word.definition" ng-focus="allowOverwriting=false"></textarea>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" ng-click="ModalCancel()">Close</button>
-          <button type="button" class="btn btn-primary" ng-click="ModalSave(word.definition)">Save changes</button>
+          <button type="button" class="btn btn-default btn-warning cancel" data-dismiss="modal" ng-click="ModalCancel()">Close</button>
+          <button type="button" class="btn btn-primary" ng-click="ModalSave()">Save changes</button>
         </div>
       </div>
     </div>

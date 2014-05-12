@@ -207,4 +207,26 @@ body {
 .modal-body textarea {
   margin-left:auto;
   margin-right:auto;
+  width:83%;
+}
+
+/* speedup transition time by 50% */
+.modal.fade .modal-dialog {
+  -webkit-transition: -webkit-transform .24s ease-out;
+     -moz-transition:    -moz-transform .24s ease-out;
+       -o-transition:      -o-transform .24s ease-out;
+          transition:         transform .24s ease-out;
+  -webkit-transform: translate(0, +5%); /* 25% was middle of screen */
+      -ms-transform: translate(0, +5%);
+          transform: translate(0, +5%);
+}
+
+// over write :hover color
+a.list-group-item:hover,
+a.list-group-item:focus {
+  background-color: #AACCEE;
+}
+
+.modal-content {
+  background-color:rgba(255,255,255,0.4);
 }
