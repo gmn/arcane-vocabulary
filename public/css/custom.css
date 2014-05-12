@@ -203,3 +203,8 @@ body {
 .black {
   color:#000 !important;
 }
+
+.modal-body textarea {
+  margin-left:auto;
+  margin-right:auto;
+}

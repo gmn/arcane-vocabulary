@@ -3,7 +3,7 @@ function _alertFunc(msg) {
     alert( "message: '" + msg + "'" );
 }
 
-angular.module("vocabApp", [])
+var module_handle = angular.module("vocabApp", [])
   .filter( 'searchFor', function() {
     return function(arr, searchString, count) {
         var result = [];
@@ -104,6 +104,7 @@ angular.module("vocabApp", [])
     $scope.showPopover = false;
     $scope.showConfirm = false;
     $scope.allowOverride = true;
+    $scope.definition = '';
     //$scope.inVal = false;
 
     $scope.init = function() { 
@@ -125,8 +126,7 @@ angular.module("vocabApp", [])
 
             e.stopPropagation();
 
-            $("#myModal").modal('show');
-/*
+//            $("#myModal").modal('show');
             if ( $scope.showConfirm ) {
                 $scope.insertOrUpdate();
                 $scope.hidePopover();
@@ -136,15 +136,17 @@ angular.module("vocabApp", [])
             } else {
                 $scope.showConfirm = true;
             }
-*/
         }
         else if ( e.which === 27 ) { // ESCAPE
 
-            if ( ! $("#myModal").modal().show ) {
-                $scope.searchString = '';
-            }
-
 /*
+            if ( $("#myModal").css("display") == "none" ) {
+                $scope.searchString = '';
+            } else {
+                $("#myModal").modal('hide');
+            }
+*/
+
             // close just the confirmation box and leave the popover
             if ( $scope.showConfirm ) {
                 $scope.hideConfirm();
@@ -157,7 +159,6 @@ angular.module("vocabApp", [])
             } else if ( $scope.searchString && $scope.searchString.length > 0 ) {
                 $scope.searchString = '';
             }
-*/
 
         }
     };
@@ -180,6 +181,20 @@ angular.module("vocabApp", [])
         
         $scope.items = $scope.db.find(/.*/);
         $scope.items = $scope.items._data;
+    };
+
+    $scope.ModalSave = function(str) {
+      if ( arguments.length === 1 && (!$scope.definition || $scope.definition.length==1) )
+        $scope.definition = str;
+      $scope.insertOrUpdate();
+      console.log( "definition: " + $scope.definition );
+      //$("#myModal").modal('hide');
+      $scope.hidePopover();
+    };
+    $scope.ModalCancel = function() {
+      //$("#myModal").modal('hide');
+      console.log( "definition: " + $scope.definition );
+      $scope.hidePopover();
     };
 
     $scope.dynamicDefinition = function() {
@@ -216,5 +231,15 @@ angular.module("vocabApp", [])
         return {};
     };
 
+
   } ); // .controller searchBoxController
 
+/* loading example
+$("#modal_submit").click(function() {
+    var btn = $(this)
+    btn.button('loading')
+    $.ajax(...).always(function () {
+      btn.button('reset')
+    });
+  });
+*/

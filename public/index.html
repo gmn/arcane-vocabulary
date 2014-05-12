@@ -156,27 +156,42 @@
 </button>
 -->
 
-  <!-- jQuery/Bootstrap Modal -->
+  <!-- jQuery/Bootstrap Modal 
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+-->
+  <div class="" id="myModal"  ng-click="$event.stopPropagation()" ng-show="showPopover">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
+<!--
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+-->
+          <button type="button" class="close" ng-click="ModalCancel()" >&times;</button>
+          <h4 class="modal-title" id="myModalLabel">
+            <input type="text" ng-model="searchString" />
+            <span ng-show="dynamicDefinition()"> &ndash; Exact Match </span>
+            <span ng-show="!dynamicDefinition()"> &ndash; new word</span>
+          </h4>
         </div>
         <div class="modal-body">
-          ...
+          Definition:<br>
+          <textarea rows="6" cols="40" type="text" ng-model="definition" ng-focus="stopOverride()" ng-blur="resumeOverride()"></textarea>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+<!--
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ModalCancel()">Close</button>
+-->
+          <button type="button" class="btn btn-default" ng-click="ModalCancel()">Close</button>
+          <button type="button" class="btn btn-primary" ng-click="ModalSave(definition)">Save changes</button>
         </div>
       </div>
     </div>
   </div>
 
+<!--
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
+-->
 
 </body>
 </html>
