@@ -104,8 +104,8 @@ var module_handle = angular.module("vocabApp", [])
     $scope.showPopover = false;
     $scope.showConfirm = false;
     $scope.allowOverride = true;
-    $scope.definition = '';
-    //$scope.inVal = false;
+        $scope.allowOverride = false;
+    $scope.word = {'definition':'hey look at me'};
 
     $scope.init = function() { 
         $scope.keycount = 0; 
@@ -174,9 +174,9 @@ var module_handle = angular.module("vocabApp", [])
         var regex = new RegExp( '^'+$scope.searchString+'$' );
         var res = $scope.db.find( {word:regex} );
         if ( res.length == 1 ) { // UPDATE
-            $scope.db.update( {word:regex}, {'$set':{def:$scope.definition}} );
+            $scope.db.update( {word:regex}, {'$set':{def:$scope.word.definition}} );
         } else { // INSERT
-            $scope.db.insert( {word:$scope.searchString,def:$scope.definition} );
+            $scope.db.insert( {word:$scope.searchString,def:$scope.word.definition} );
         }
         
         $scope.items = $scope.db.find(/.*/);
@@ -184,16 +184,16 @@ var module_handle = angular.module("vocabApp", [])
     };
 
     $scope.ModalSave = function(str) {
-      if ( arguments.length === 1 && (!$scope.definition || $scope.definition.length==1) )
-        $scope.definition = str;
+      if ( arguments.length === 1 && str.length > 0 && $scope.word.definition.length==0 )
+        $scope.word.definition = str;
       $scope.insertOrUpdate();
-      console.log( "definition: " + $scope.definition );
+      console.log( "word.definition: " + $scope.word.definition );
       //$("#myModal").modal('hide');
       $scope.hidePopover();
     };
     $scope.ModalCancel = function() {
       //$("#myModal").modal('hide');
-      console.log( "definition: " + $scope.definition );
+      console.log( "word.definition: " + $scope.word.definition );
       $scope.hidePopover();
     };
 
@@ -203,7 +203,7 @@ var module_handle = angular.module("vocabApp", [])
         // only change it if editing the 'word' parm
 
         if ( $scope.allowOverride ) 
-            $scope.definition = exactDef.def;
+            $scope.word.definition = exactDef.def;
         return exactDef.bval;
     };
 
@@ -213,6 +213,7 @@ var module_handle = angular.module("vocabApp", [])
 
     $scope.resumeOverride = function() {
         $scope.allowOverride = true;
+        $scope.allowOverride = false;
     };
 
 

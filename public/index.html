@@ -38,14 +38,14 @@
 
   <div class="container custom" role="main">
 
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-        <h3 class="text-muted">Arcane Vocabulary Tutor</h3>
-      </div>
+    <div class="header">
+      <ul class="nav nav-pills pull-right">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <h3 class="text-muted">Arcane Vocabulary Tutor</h3>
+    </div>
 
     <div class="jumbotron" style="margin-bottom:18px;padding:30px 40px">
 
@@ -125,47 +125,10 @@
     </div>
       
 
-
-    <!-- popup boxes 
-    <div class="popover_box" ng-click="$event.stopPropagation()" ng-show="showPopover">
-      <span ng-show="dynamicDefinition()"><h2><u>Exact Match</u></h2> &mdash; Edit Word <b>{{searchString}}</b></span>
-      <span ng-show="!dynamicDefinition()">Add New Word <b>{{searchString}}</b></span>
-      Word: 
-          <input type="text" ng-model="searchString" />
-      def: 
-          <textarea rows="6" cols="30" type="text" ng-model="definition" ng-focus="stopOverride()" ng-blur="resumeOverride()" ></textarea>
-      <br>
-      <input type="button" value="Delete" /> &nbsp;
-      <input type="button" value="Cancel" /> &nbsp;
-      <input type="button" value="Submit" />
-    </div>
-
-
-    <div class="confirm" ng-show="showConfirm">
-      CONFIRM DIALOG <br>
-      <input type="submit" value="Cancel" /> &nbsp;
-      <input type="submit" value="OK" />
-    </div>
--->
-
-  </div><!-- container -->
-
-<!-- Button trigger modal 
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
--->
-
-  <!-- jQuery/Bootstrap Modal 
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
--->
-  <div class="" id="myModal"  ng-click="$event.stopPropagation()" ng-show="showPopover">
+  <div ng-click="$event.stopPropagation()" ng-show="showPopover">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-<!--
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
--->
           <button type="button" class="close" ng-click="ModalCancel()" >&times;</button>
           <h4 class="modal-title" id="myModalLabel">
             <input type="text" ng-model="searchString" />
@@ -175,23 +138,18 @@
         </div>
         <div class="modal-body">
           Definition:<br>
-          <textarea rows="6" cols="40" type="text" ng-model="definition" ng-focus="stopOverride()" ng-blur="resumeOverride()"></textarea>
+          <textarea rows="6" cols="40" type="text" ng-model="word.definition" ng-focus="stopOverride()" ng-blur="resumeOverride()"></textarea>
         </div>
         <div class="modal-footer">
-<!--
-          <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ModalCancel()">Close</button>
--->
           <button type="button" class="btn btn-default" ng-click="ModalCancel()">Close</button>
-          <button type="button" class="btn btn-primary" ng-click="ModalSave(definition)">Save changes</button>
+          <button type="button" class="btn btn-primary" ng-click="ModalSave(word.definition)">Save changes</button>
         </div>
       </div>
     </div>
   </div>
 
-<!--
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-  <script src="/js/bootstrap.min.js"></script>
--->
+
+  </div><!-- container -->
 
 </body>
 </html>
