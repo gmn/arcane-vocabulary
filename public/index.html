@@ -81,18 +81,12 @@
     <div class="row">
       <div class="col-md-1"></div>
       <div class="col-md-10">
-
-<!--
-            <a href="#" class="list-group-item active" ng-repeat="i in items | searchFor:searchString">
--->
-
         <div class="list-group">
-          <a href="#" class="list-group-item" ng-repeat="i in items | searchFor:searchString">
+          <a href="#" class="list-group-item" ng-repeat="i in items | searchFor:searchString" ng-click="spawnModalOpen(i.word)">
             <h4 class="list-group-item-heading">{{i.word}}</h4>
             <p class="list-group-item-text">{{i.def}}</p>
           </a>
         </div>
-
       </div>
       <div class="col-md-1"></div>
     </div>
