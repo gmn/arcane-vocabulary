@@ -95,13 +95,15 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">
-              <input id="modalInput" tabindex="0" type="text" ng-model="searchString" focus-me="modalOpen" />
-              <span ng-style="dynamicDefinition()"> &ndash; {{wordEvaluation}}</span>
+              <table><tr><td>Editing Dialog</td></tr><tr><td>
+                <input id="modalInput" tabindex="0" type="text" ng-model="searchString" focus-me="modalOpen" />
+                <span ng-style="dynamicDefinition()"> &ndash; {{wordEvaluation}}</span>
+              </td></tr></table>
             </h4>
           </div>
           <div class="modal-body">
             Definition:<br>
-            <textarea id="modalDef" rows="6" type="text" ng-model="word.definition" ng-focus="allowOverwriting=false"></textarea>
+            <textarea id="modalDef" rows="6" type="text" ng-model="word.definition" ng-focus="allowOverwriting=false" style="width:100%"></textarea>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-warning cancel" data-dismiss="modal" ng-click="ModalCancel()">Cancel</button>
