@@ -193,6 +193,9 @@ var app = angular.module("vocabApp", [])
             if ( $("#myModal").css("display") == "none" ) {
                 $scope.searchString = '';
             } else {
+                if ( $scope.prevString && $scope.prevString.length > 0 )
+                  $scope.searchString = $scope.prevString;
+                $scope.prevString = '';
                 $("#myModal").modal('hide');
                 $scope.modalOpen = false;
             }
