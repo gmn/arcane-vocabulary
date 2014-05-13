@@ -87,49 +87,50 @@
       <div class="col-md-1"></div>
     </div>
       
-  <!-- Main Editing Modal -->
-  <div class="modal fade fast" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
-    <div class="modal-dialog fast">
-      <div class="modal-content transparent">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">
-            <input id="modalInput" tabindex="0" type="text" ng-model="searchString" focus-me="modalOpen" />
-            <span ng-style="dynamicDefinition()"> &ndash; {{wordEvaluation}}</span>
-          </h4>
-        </div>
-        <div class="modal-body">
-          Definition:<br>
-          <textarea id="modalDef" rows="6" type="text" ng-model="word.definition" ng-focus="allowOverwriting=false"></textarea>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default cancel" data-dismiss="modal" ng-click="ModalCancel()">Cancel</button>
-          <button type="button" class="btn btn-primary" ng-click="ModalSave()">Save changes</button>
+
+    <!-- Main Editing Modal -->
+    <div class="modal fade fast" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
+      <div class="modal-dialog fast">
+        <div class="modal-content transparent">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">
+              <input id="modalInput" tabindex="0" type="text" ng-model="searchString" focus-me="modalOpen" />
+              <span ng-style="dynamicDefinition()"> &ndash; {{wordEvaluation}}</span>
+            </h4>
+          </div>
+          <div class="modal-body">
+            Definition:<br>
+            <textarea id="modalDef" rows="6" type="text" ng-model="word.definition" ng-focus="allowOverwriting=false"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-warning cancel" data-dismiss="modal" ng-click="ModalCancel()">Cancel</button>
+            <button type="button" class="btn btn-primary" ng-click="ModalSave()">Save changes</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
 
-  <!-- About Information Modal -->
-  <div class="modal fade fast" id="infoModal" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true"> 
-    <div class="modal-dialog fast">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="infoModalLabel">
-            Arcane Vocabulary Tutor &nbsp; &nbsp;<span style="font-size:0.84em;color:#777">&copy; 2014, Greg Naughton</span>
-          </h4>
-        </div>
-        <div class="modal-body">
-          <p class="font-size:16px !important">This is a simple Vocabulary Tutor. It stores word definitions so you can add new words as you discover them, and edit the ones you already have stored to iteratively refine your personal list.<br><br>Start typing into the input box to see if the word you are looking for is already stored. Stored words are matched by what you type. For instance, typing <em>obe</em> will match both: <em>obeisance</em> and <em>obey</em>. It will tell you when you match more than one word. Hitting <strong>Enter</strong> will bring up the editing dialog in which you can make changes or add new words.<br><br>The vocabulary list is customized to each user, and is, in fact, saved to your browser locally. So any changes you make are yours to keep; furthermore, they are not sent to the server, and are only visible by you.<br><br>To see the code, look to: <a href="https://github.com/gmn/arcane-vocabulary" target="_blank">github.com/gmn/arcane-vocabulary</a>. To contact the author of this work, send an email to: <a href="mailto:greg@naughton.org">greg@naughton.org</a> (or just say hi :)</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default btn-warning cancel" data-dismiss="modal">Close</button>
+    <!-- About Information Modal -->
+    <div class="modal fade fast" id="infoModal" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true"> 
+      <div class="modal-dialog fast">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="infoModalLabel">
+              Arcane Vocabulary Tutor &nbsp; <span style="font-size:0.84em;color:#777">&copy; 2014, Greg Naughton</span>
+            </h4>
+          </div>
+          <div class="modal-body">
+            <p class="font-size:16px !important">This is a simple Vocabulary Tutor. It stores word definitions so you can add new words as you discover them, and edit the ones you already have stored to iteratively refine your personal list.<br><br>Start typing into the input box to see if the word you are looking for is already stored. Stored words are matched by what you type. For instance, typing <em><b>obe</b></em> will match both: <em><b>obeisance</b></em> and <em><b>obey</b></em>. It will tell you when you match more than one word. Hitting <strong>Enter</strong> will bring up the editing dialog in which you can make changes or add new words.<br><br>The vocabulary list is customized to each user, and is, in fact, saved to your browser locally. So any changes you make are yours to keep; furthermore, they are not sent to the server, and are only visible by you.<br><br>To see the code, look to: <a href="https://github.com/gmn/arcane-vocabulary" target="_blank">github.com/gmn/arcane-vocabulary</a>. To contact the author of this work, send an email to: <a href="mailto:greg@naughton.org">greg@naughton.org</a> (or just say hi :)</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-warning cancel" data-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
 
   </div><!-- container -->
