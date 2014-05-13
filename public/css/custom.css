@@ -204,14 +204,16 @@ body {
   color:#000 !important;
 }
 
+/*
+ * customize Main Editing Modal
+ */
 .modal-body textarea {
   margin-left:auto;
   margin-right:auto;
   width:83%;
 }
-
 /* speedup transition time by 50% */
-.modal.fade .modal-dialog {
+.fast, .modal .fade .modal-dialog .fast {
   -webkit-transition: -webkit-transform .24s ease-out;
      -moz-transition:    -moz-transform .24s ease-out;
        -o-transition:      -o-transform .24s ease-out;
@@ -220,13 +222,14 @@ body {
       -ms-transform: translate(0, +5%);
           transform: translate(0, +5%);
 }
+.transparent, .modal-content .transparent {
+  background-color:rgba(255,255,255,0.4) !important;
+}
 
-// over write :hover color
+// over write :hover color; doesn't work!
 a.list-group-item:hover,
 a.list-group-item:focus {
   background-color: #AACCEE;
 }
 
-.modal-content {
-  background-color:rgba(255,255,255,0.4);
-}
+
