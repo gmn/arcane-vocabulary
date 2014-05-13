@@ -133,8 +133,6 @@ var app = angular.module("vocabApp", [])
     $scope.items = [];
     $scope.keycount = -777;
     $scope.enterMessage = '';
-    $scope.showPopover = false;
-    $scope.showConfirm = false;
     $scope.allowOverwriting = true;
     $scope.word = {'definition':''};
     $scope.wordEvaluation = '';
@@ -184,17 +182,6 @@ var app = angular.module("vocabApp", [])
 
             $scope.modalOpen = true;
 
-/*
-            if ( $scope.showConfirm ) {
-                $scope.insertOrUpdate();
-                $scope.hidePopover();
-                $scope.hideConfirm();
-            } else if ( ! $scope.showPopover ) {
-                $scope.showPopover = true;
-            } else {
-                $scope.showConfirm = true;
-            }
-*/
         }
         else if ( e.which === 27 ) { // ESCAPE
 
@@ -208,30 +195,8 @@ var app = angular.module("vocabApp", [])
                 $scope.modalOpen = false;
             }
 
-/*
-            // close just the confirmation box and leave the popover
-            if ( $scope.showConfirm ) {
-                $scope.hideConfirm();
-
-            // hide the popover
-            } else if ( $scope.showPopover ) {
-                $scope.hidePopover();
-
-            // no boxes are showing:- ESC clears string
-            } else if ( $scope.searchString && $scope.searchString.length > 0 ) {
-                $scope.searchString = '';
-            }
-*/
-
         }
     };
-
-    $scope.hidePopover = function() {
-        $scope.showPopover = false;
-    };
-    $scope.hideConfirm = function() {
-        $scope.showConfirm = false;
-    }
 
     $scope.insertOrUpdate = function() {
         var regex = new RegExp( '^'+$scope.searchString+'$' );
@@ -253,7 +218,6 @@ var app = angular.module("vocabApp", [])
       $scope.prevString = '';
       $scope.insertOrUpdate();
       $("#myModal").modal('hide');
-      $scope.hidePopover();
       $scope.allowOverwriting = true;
       $scope.modalOpen = false;
     };
@@ -262,7 +226,6 @@ var app = angular.module("vocabApp", [])
         $scope.searchString = $scope.prevString;
       $scope.prevString = '';
       $("#myModal").modal('hide');
-      $scope.hidePopover();
       $scope.allowOverwriting = true;
       $scope.modalOpen = false;
     };

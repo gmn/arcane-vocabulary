@@ -93,9 +93,9 @@
       <div class="modal-dialog fast">
         <div class="modal-content transparent">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="ModalCancel()">&times;</button>
             <h4 class="modal-title" id="myModalLabel">
-              <table><tr><td>Editing Dialog</td></tr><tr><td>
+              <table style="margin-left:10px"><tr><td>Edit or Add New Word</td></tr><tr><td>
                 <input id="modalInput" tabindex="0" type="text" ng-model="searchString" focus-me="modalOpen" />
                 <span ng-style="dynamicDefinition()"> &ndash; {{wordEvaluation}}</span>
               </td></tr></table>
@@ -103,6 +103,7 @@
           </div>
           <div class="modal-body">
             Definition:<br>
+            &nbsp;* any word that doesn't match an existing one will be created/added<br>
             <textarea id="modalDef" rows="6" type="text" ng-model="word.definition" ng-focus="allowOverwriting=false" style="width:100%"></textarea>
           </div>
           <div class="modal-footer">
