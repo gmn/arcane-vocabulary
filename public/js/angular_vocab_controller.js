@@ -140,11 +140,19 @@ var app = angular.module("vocabApp", [])
     $scope.wordEvaluation = '';
     $scope.modalOpen = false;
     $scope.prevString = '';
+    $scope.db_name = 'ArcaneVocab';
 
     $scope.init = function() { 
         $scope.keycount = 0; 
-        // create database of words from vocabulary.js
-        $scope.db = queryable.open( {"db_name":"TestPage","data":_stub_vocabulary} );
+
+        // create database 
+        if ( !localStorage || ! localStorage[ $scope.db_name ] )
+          // use stock vocab list from vocabulary.js
+          $scope.db = queryable.open( {"db_name": $scope.db_name ,"data":_stub_vocabulary} );
+        else
+          // allow queryable to load from localStorage
+          $scope.db = queryable.open( {"db_name": $scope.db_name } );
+
         $scope.items = $scope.db.find(/.*/)._data;
     }
 
@@ -235,9 +243,10 @@ var app = angular.module("vocabApp", [])
         } else { // INSERT
             $scope.db.insert( {word:word,def:def} );
         }
-        
         $scope.items = $scope.db.find(/.*/);
         $scope.items = $scope.items._data;
+        $scope.db.save(); // if we only save here, a user will _always_ get the stock list until they do their
+                          // first update; after that, they will retain their customized data.
     };
 
     $scope.ModalSave = function() {
