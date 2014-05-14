@@ -232,4 +232,16 @@ a.list-group-item:focus {
   background-color: #AACCEE;
 }
 
-
+.close {
+  font-size:2.0em;
+}
+.close:hover {
+  color:#000;
+  font-size:2.0em;
+}
+.skinny {
+  padding:16px;
+}
+.no-top {
+  margin-top:0;
+}

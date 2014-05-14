@@ -43,19 +43,19 @@
 
     <div class="header">
       <ul class="nav nav-pills pull-right">
-        <li class="active"><a href="#">Home</a></li>
+        <li class="active"><a href="/">Home</a></li>
         <li><a id="about" href="#" onclick="$('#infoModal').modal('toggle')">About</a></li>
         <li><a id="contact" href="#" data-toggle="popover" data-trigger="manual" data-html="true" data-placement="bottom" data-content="Code demo by Greg Naughton <a href='mailto:greg@naughton.org'>greg@naughton.org</a> &copy;&nbsp;2014<img src='/img/gmn-170px.jpg'/><br><br>If you like what you see, <a href='mailto:greg@naughton.org'>drop me a line</a>. Or better yet, hire me!" onclick="$('#contact').popover('toggle');return false">Contact</a></li>
       </ul>
       <h3 class="text-muted">Arcane Vocabulary Tutor</h3>
     </div>
 
-    <div class="jumbotron" style="margin-bottom:18px;padding:30px 40px">
+    <div>
+      <p style="margin-left:auto;margin-right:auto;text-align:center">Every word you come across that you don't know, look it up and put it here</p>
+    </div>
 
-
-
-        <input class="big_input" type="text" ng-model="searchString" ng-style="inputStyle()" placeholder="Type to lookup words" focus-me="!modalOpen" />
-
+    <div class="jumbotron" style="margin-bottom:18px;padding: 16px 34px"> <!-- "20px 40px" -->
+      <input class="big_input" type="text" ng-model="searchString" ng-style="inputStyle()" placeholder="Type to lookup words" focus-me="!modalOpen" />
     </div><!-- jumbotron -->
 
 
@@ -101,12 +101,12 @@
               </td></tr></table>
             </h4>
           </div>
-          <div class="modal-body">
+          <div class="modal-body skinny">
             Definition:<br>
-            &nbsp;* any word that doesn't match an existing one will be created/added<br>
+            &nbsp;* any word that doesn't match an existing one will be added/created<br>
             <textarea id="modalDef" rows="6" type="text" ng-model="word.definition" ng-focus="allowOverwriting=false" style="width:100%"></textarea>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer no-top">
             <button type="button" class="btn btn-warning cancel" data-dismiss="modal" ng-click="ModalCancel()">Cancel</button>
             <button type="button" class="btn btn-primary" ng-click="ModalSave()">Save changes</button>
           </div>
@@ -122,7 +122,7 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="infoModalLabel">
-              Arcane Vocabulary Tutor &nbsp; <span style="font-size:0.84em;color:#777">&copy; 2014, Greg Naughton</span>
+              Arcane Vocabulary Tutor &nbsp; <span style="font-size:0.84em;color:#777">&copy; 2014 Greg Naughton</span>
             </h4>
           </div>
           <div class="modal-body">
