@@ -1,5 +1,5 @@
 {
-  "name": "arcane_vocab",
+  "name": "arcane-vocabulary",
   "version": "0.0.1",
   "author": {
     "name": "Greg Naughton",
@@ -7,7 +7,8 @@
   },
   "private": true,
   "scripts": {
-    "start": "./bin/www"
+    "start": "./bin/run-www",
+    "deploy": "git push heroku master"
   },
   "dependencies": {
     "express": "~4.0.0",
@@ -17,7 +18,7 @@
     "body-parser": "~1.0.0",
     "debug": "~0.7.4",
     "jade": "~1.3.0",
-    "queryable": "~0.1.2"
+    "queryable": "~0.2.5"
   },
   "engines": {
     "node": "0.10.x"
